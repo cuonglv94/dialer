@@ -38,7 +38,10 @@ class ExpandableAdapter internal constructor(
 
         val vxName = convertView!!.findViewById<TextView>(R.id.vxName)
         vxName.text = vacxin.vxName
-
+        val imageview0 = convertView!!.findViewById<ImageView>(R.id.imageview0)
+        if(!vacxin.isCurrent){
+            imageview0.setBackgroundResource(R.drawable.ic_phone_blue_vector)
+        }
         val imageview = convertView!!.findViewById<ImageView>(R.id.imageview)
         if(vacxin.image == 0){
             imageview.setBackgroundResource(R.drawable.ic_call_decline)

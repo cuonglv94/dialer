@@ -14,18 +14,26 @@ import com.simplemobiletools.dialer.models.Baby
 import com.simplemobiletools.dialer.models.Vacxin
 import org.json.JSONArray
 import org.json.JSONTokener
+import java.lang.Math.abs
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun getVacxinInfo(context: Context, number: String, callback: (Baby) -> Unit) {
     ensureBackgroundThread {
         val baby = Baby(HashMap())
-        val url = "http://tc36.xyz:4000/api/timkh/$number"
+        val url = "http://tc36.xyz:4000/api/timkh/0842565567"
         val queue = Volley.newRequestQueue(context)
         val vacxinList = HashMap<String, List<Vacxin>>()
         if (checkForInternet(context)) {
             val request = StringRequest(Request.Method.POST, url,
                 { response ->
                     val jsonArray = JSONTokener(response).nextValue() as JSONArray
+                    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+                    val currentDate: String = simpleDateFormat.format(Date())
+                    Log.d("currentDate",currentDate)
                     for (i in 0 until jsonArray.length()) {
                         val babyList: MutableList<Vacxin> = ArrayList()
                         val name = jsonArray.getJSONObject(i).getString("kh_ten")
@@ -36,16 +44,34 @@ fun getVacxinInfo(context: Context, number: String, callback: (Baby) -> Unit) {
                         val vxArray = JSONTokener(vacxin).nextValue() as JSONArray
                         for (i in 0 until vxArray.length()) {
                             val vxName = vxArray.getJSONObject(i).getString("vx_ten")
-                            val ngay_hen: String? = vxArray.getJSONObject(i).getString("vx_ngay_hen")
-                            var ngay_tiem: String? = ""
-                            if (ngay_hen == "null") ngay_tiem = vxArray.getJSONObject(i).getString("vx_ngay_tiem")
-                            val vx_tiem = vxArray.getJSONObject(i).getString("vx_tiem")
-                            val date: String? = if (ngay_hen == "null") ngay_tiem else ngay_hen
-                            val isTiem = if (vx_tiem.compareTo("Chưa chọn", ignoreCase = true) > 0)  0 else 1
-                            babyList.add(Vacxin(date!!.substring(0,10),vxName,isTiem))
+                            var date = ""
+                            var isTiem = 0
+                            var isCurrent = false
+                            if(!vxArray.getJSONObject(i).isNull("vx_ngay_tiem")){
+                                val ngay_tiem = vxArray.getJSONObject(i).getString("vx_ngay_tiem")
+                                val date1 = simpleDateFormat.parse(currentDate)
+                                val date2 = simpleDateFormat.parse(ngay_tiem)
+                                val difference = abs(date1.time - date2.time)/(24 * 60 * 60 * 1000)
+                                isCurrent = difference.toString() == "2"
+                                date = ngay_tiem.substring(0,10)
+                                isTiem = 1
+                            } else if(!vxArray.getJSONObject(i).isNull("vx_ngay_hen")){
+                                val ngay_hen = vxArray.getJSONObject(i).getString("vx_ngay_hen")
+                                date = ngay_hen.substring(0,10)
+                            } else{
+                                date = "Chưa có lịch"
+                                isTiem = 2
+                            }
+                            if(babyList.firstOrNull  { it.date == date } == null){
+                                babyList.add(Vacxin(date,vxName,isTiem,isCurrent))
+                            } else{
+                                babyList?.find { it.date == date }?.vxName += "-$vxName"
+                            }
+
                         }
                         babyList.sortBy { it.image }
                         babyList.reverse()
+                        Log.d("baby list",babyList.toString())
                         vacxinList[strName] =babyList
                     }
                     baby.vacxinInfo = vacxinList

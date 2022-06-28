@@ -6,28 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/caller_avatar"
-        android:layout_width="@dimen/incoming_call_avatar_size"
-        android:layout_height="@dimen/incoming_call_avatar_size"
-        android:contentDescription="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05"
-        tools:src="@drawable/ic_call_accept" />
-
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/caller_name_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginTop="30dp"
         android:gravity="center_horizontal"
         android:textSize="@dimen/caller_name_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/caller_avatar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Caller name" />
 
     <com.simplemobiletools.commons.views.MyTextView
@@ -64,17 +52,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/call_status_label"/>
-
-    <ExpandableListView
-        android:id="@+id/expendableList"
-        android:layout_width="520px"
-        android:layout_height="460px"
-        android:divider="@android:color/background_light"
-        android:layout_marginTop="20px"
-        android:dividerHeight="0.5dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/call_status_label"/>
+        app:layout_constraintTop_toBottomOf="@id/call_status_label"
+        app:layout_constraintHeight_percent="0.6">
+        <ExpandableListView
+            android:id="@+id/expendableList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:divider="@android:color/background_light"
+            android:paddingStart="30px"
+            android:paddingEnd="30px"
+            android:layout_marginTop="20px"
+            android:dividerHeight="0.5dp" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/hold_status_label"

@@ -402,12 +402,6 @@ class CallActivity : SimpleActivity() {
         } else {
             caller_number.beGone()
         }
-
-        if (avatar != null) {
-            caller_avatar.setImageBitmap(avatar)
-        } else {
-            caller_avatar.setImageDrawable(null)
-        }
     }
 
     private fun getContactNameOrNumber(contact: CallContact): String {
