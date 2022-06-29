@@ -16,6 +16,8 @@ import android.provider.CallLog
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
@@ -55,7 +57,6 @@ class MainActivity : SimpleActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         appLaunched(BuildConfig.APPLICATION_ID)
-
         launchedDialer = savedInstanceState?.getBoolean(OPEN_DIAL_PAD_AT_LAUNCH) ?: false
 
         if (isDefaultDialer()) {
