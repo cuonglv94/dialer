@@ -24,7 +24,7 @@ import kotlin.collections.HashMap
 fun getVacxinInfo(context: Context, number: String, callback: (Baby) -> Unit) {
     ensureBackgroundThread {
         val baby = Baby(HashMap())
-        val url = "http://tc36.xyz:4000/api/timkh/0842565567"
+        val url = "http://tc36.xyz:4000/api/timkh/$number"
         val queue = Volley.newRequestQueue(context)
         val vacxinList = HashMap<String, List<Vacxin>>()
         if (checkForInternet(context)) {
@@ -37,9 +37,16 @@ fun getVacxinInfo(context: Context, number: String, callback: (Baby) -> Unit) {
                     for (i in 0 until jsonArray.length()) {
                         val babyList: MutableList<Vacxin> = ArrayList()
                         val name = jsonArray.getJSONObject(i).getString("kh_ten")
+                        val date = jsonArray.getJSONObject(i).getString("kh_ngay_sinh")
+                        var dateStr = date.substring(0,10)
+                        if(dateStr.contains("-")) {
+                            val arTemp: List<String> = dateStr.split("-")
+                            val arTempReve = arTemp.reversed()
+                            dateStr = "  |   " + arTempReve.joinToString(separator = "/")
+                        }
                         val strArr: List<String> = name.split(" ")
                         val subArr = strArr.subList(0, strArr.size - 1)
-                        val strName = subArr.joinToString(separator = " ")
+                        val strName = subArr.joinToString(separator = " ") + dateStr
                         val vacxin = jsonArray.getJSONObject(i).getString("kh_vac_xin")
                         val vxArray = JSONTokener(vacxin).nextValue() as JSONArray
                         for (i in 0 until vxArray.length()) {
@@ -69,8 +76,9 @@ fun getVacxinInfo(context: Context, number: String, callback: (Baby) -> Unit) {
                             }
 
                         }
-                        babyList.sortBy { it.image }
+                        babyList.sortBy { it.date }
                         babyList.reverse()
+                        Log.d("36care", babyList.toString())
                         Log.d("baby list",babyList.toString())
                         vacxinList[strName] =babyList
                     }

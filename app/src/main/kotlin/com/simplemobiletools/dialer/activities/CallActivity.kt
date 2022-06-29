@@ -505,6 +505,10 @@ class CallActivity : SimpleActivity() {
             }
             callContact = contact
             val avatar = if (!call.isConference()) callContactAvatarHelper.getCallContactAvatar(contact) else null
+            runOnUiThread {
+                updateOtherPersonsInfo(avatar)
+                checkCalledSIMCard()
+            }
             getVacxinInfo(applicationContext,contact.number){ baby ->
                 runOnUiThread{
                     if (expendableList != null) {
@@ -517,10 +521,7 @@ class CallActivity : SimpleActivity() {
                     }
                 }
             }
-            runOnUiThread {
-                updateOtherPersonsInfo(avatar)
-                checkCalledSIMCard()
-            }
+
         }
     }
 

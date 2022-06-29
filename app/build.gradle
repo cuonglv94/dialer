@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
@@ -15,8 +16,8 @@ android {
         applicationId "com.simplemobiletools.dialer"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 38
-        versionName "5.13.2"
+        versionCode 3
+        versionName "2.0"
         setProperty("archivesBaseName", "dialer")
     }
 
@@ -61,6 +62,8 @@ android {
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.github.SimpleMobileTools:Simple-Commons:fd1fde1dbd'
     implementation 'com.github.tibbi:IndicatorFastScroll:4524cd0b61'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -68,4 +71,5 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
     implementation 'androidx.cardview:cardview:1.0.0'
+
 }

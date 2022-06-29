@@ -1,6 +1,7 @@
 package com.simplemobiletools.dialer.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
@@ -39,14 +40,16 @@ class ExpandableAdapter internal constructor(
         val vxName = convertView!!.findViewById<TextView>(R.id.vxName)
         vxName.text = vacxin.vxName
         val imageview0 = convertView!!.findViewById<ImageView>(R.id.imageview0)
-        if(!vacxin.isCurrent){
-            imageview0.setBackgroundResource(R.drawable.ic_phone_blue_vector)
+        if(vacxin.isCurrent){
+            imageview0.setBackgroundResource(R.drawable.ic_baseline_arrow_forward_24)
+        } else {
+            imageview0.setBackgroundColor(Color.TRANSPARENT)
         }
         val imageview = convertView!!.findViewById<ImageView>(R.id.imageview)
         if(vacxin.image == 0){
-            imageview.setBackgroundResource(R.drawable.ic_call_decline)
+            imageview.setBackgroundResource(R.drawable.ic_baseline_calendar_today_24)
         }else{
-            imageview.setBackgroundResource(R.drawable.ic_call_accept)
+            imageview.setBackgroundResource(R.drawable.ic_baseline_history_24)
         }
 
         return convertView
